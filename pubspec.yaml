@@ -10,7 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  firebase_core: ^2.7.0
+
+  firebase_core: ^2.7.0     # Ativa os recursos padrão do firebase
+  firebase_auth: ^4.2.9     # Permite utilizar os recursos de autenticação do firebase
+  cloud_firestore: ^4.4.3   # Permite utilizar o banco de dados cloud firestore
+  google_fonts: ^4.0.3
 
 dev_dependencies:
   flutter_test:
