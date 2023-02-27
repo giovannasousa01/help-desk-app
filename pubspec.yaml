@@ -15,6 +15,7 @@ dependencies:
   firebase_auth: ^4.2.9     # Permite utilizar os recursos de autenticação do firebase
   cloud_firestore: ^4.4.3   # Permite utilizar o banco de dados cloud firestore
   google_fonts: ^4.0.3
+  lottie: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -23,3 +24,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/animations/
+    #- assets/images
