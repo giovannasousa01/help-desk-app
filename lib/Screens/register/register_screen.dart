@@ -13,6 +13,34 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
+
+  String msgError = "";
+
+  void validarCampos() {
+    String nome = nomeController.text;
+    String email = emailController.text;
+    String senha = senhaController.text;
+
+    if (nome.isNotEmpty) {
+      if (email.isNotEmpty && email.contains("@")) {
+        if (senha.isNotEmpty && senha.length >= 8) {
+          cadastrarUsuario();
+        } else {
+          msgError = "Informe uma senha igual ou maior que 8 caracteres";
+        }
+      } else {
+        msgError = "Preencha o campo Email corretamente";
+      }
+    } else {
+      msgError = "Preencha o campo Nome corretamente";
+    }
+  }
+
+  void cadastrarUsuario() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               width: double.infinity,
               height: 70,
               child: TextFormField(
+                controller: nomeController,
                 decoration: InputDecoration(
                   hintText: "Nome",
                   filled: true,
@@ -86,6 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               width: double.infinity,
               height: 70,
               child: TextFormField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: "Email",
@@ -124,6 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               width: double.infinity,
               height: 70,
               child: TextFormField(
+                controller: senhaController,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
                   hintText: "Senha",
