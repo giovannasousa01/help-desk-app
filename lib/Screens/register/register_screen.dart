@@ -1,9 +1,12 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_desk_app/utils/app_colors.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../model/users.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,7 +30,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (nome.isNotEmpty) {
       if (email.isNotEmpty && email.contains("@")) {
         if (senha.isNotEmpty && senha.length >= 8) {
-          cadastrarUsuario();
+          Users user = Users();
+          user.nome = nome;
+          user.email = email;
+          user.senha = senha;
+
+          cadastrarUsuario(user);
         } else {
           msgError = "Informe uma senha igual ou maior que 8 caracteres";
         }
@@ -39,7 +47,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void cadastrarUsuario() {}
+  void cadastrarUsuario(Users user) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    auth
+        .createUserWithEmailAndPassword(
+      email: user.email,
+      password: user.senha,
+    )
+        .then((firebaseUser) {
+      const SnackBar snackBar = SnackBar(
+        content: Text("Usuário cadastrado com sucesso"),
+        duration: Duration(seconds: 5),
+      );
+
+      msgError = "";
+      nomeController.text = "";
+      emailController.text = "";
+      senhaController.text = "";
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }).catchError((error) {
+      print("Aconteceu um erro: ${error.toString()}");
+    });
+  }
+
+  bool _isVisible = true;
+
+  void visiblePassword() {
+    setState(() {
+      _isVisible = !_isVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +111,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(
               height: 50,
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              width: double.infinity,
-              height: 70,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 30,
+                right: 30,
+                bottom: 10,
+              ),
               child: TextFormField(
                 controller: nomeController,
                 decoration: InputDecoration(
@@ -110,10 +151,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              width: double.infinity,
-              height: 70,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 30,
+                right: 30,
+                bottom: 10,
+              ),
               child: TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -149,10 +192,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              width: double.infinity,
-              height: 70,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 30,
+                right: 30,
+                bottom: 30,
+              ),
               child: TextFormField(
                 controller: senhaController,
                 keyboardType: TextInputType.visiblePassword,
@@ -172,6 +217,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Icons.lock,
                     color: AppColors.textColorBlue,
                   ),
+                  suffixIcon: GestureDetector(
+                    onTap: visiblePassword,
+                    child: Icon(
+                      _isVisible
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
                   errorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: AppColors.buttonRed,
@@ -186,7 +240,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   color: AppColors.textColorBlue,
                   fontSize: 18,
                 ),
-                obscureText: true,
+                obscureText: _isVisible,
               ),
             ),
             const SizedBox(
@@ -197,7 +251,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  validarCampos();
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,
                 ),
