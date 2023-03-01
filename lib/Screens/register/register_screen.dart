@@ -1,12 +1,12 @@
-// ignore_for_file: avoid_unnecessary_containers, avoid_print
+// ignore_for_file: avoid_print
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_desk_app/utils/app_colors.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../model/users.dart';
+import '../../widgets/lottie_animation_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -88,7 +88,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            lottieAnimation(),
+            const LottieAnimation(
+              pathAnimation: "assets/animations/animation_users.json",
+              width: 250,
+              height: 250,
+            ),
             Text(
               "Cadastre-se",
               style: GoogleFonts.poppins(
@@ -274,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.buttonRed,
                 ),
@@ -292,17 +296,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-}
-
-Widget lottieAnimation() {
-  return Container(
-    alignment: Alignment.center,
-    margin: const EdgeInsets.only(top: 10, bottom: 10),
-    child: Lottie.asset(
-      'assets/animations/animation_users.json',
-      width: 250,
-      height: 250,
-      fit: BoxFit.fill,
-    ),
-  );
 }
