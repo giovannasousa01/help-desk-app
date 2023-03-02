@@ -3,8 +3,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:help_desk_app/Screens/register/register_screen.dart';
 import 'package:help_desk_app/utils/app_colors.dart';
+
+import 'screens/login/login_screen.dart';
+import 'screens/register/register_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,9 +27,13 @@ class HelpDeskApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'HelpDesk App',
       theme: ThemeData(
-        primaryColor: AppColors.textColorBlue,
+        primaryColor: AppColors.primaryColor,
       ),
-      home: const RegisterScreen(),
+      initialRoute: "/login",
+      routes: {
+        "/login": (BuildContext context) => const LoginScreen(),
+        "/register": (BuildContext context) => const RegisterScreen(),
+      },
     );
   }
 }
